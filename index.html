@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Serenity Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .card {
+      background: white;
+      max-width: 500px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .status {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .comfortable { background: #c8f7c5; }
+    .warning { background: #ffe7b3; }
+    .uncomfortable { background: #ffc9c9; }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #007bff;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h1>🌿 Serenity Dashboard</h1>
+
+    <p><strong>Time:</strong> <span id="time">Loading...</span></p>
+    <p><strong>Temperature:</strong> <span id="temp">-</span> °C</p>
+    <p><strong>Humidity:</strong> <span id="humidity">-</span> %</p>
+    <p>
+  <strong>AllThingsTalk:</strong>
+  <a href="https://maker.allthingstalk.com/ground/beT9byW7BnbQJg2XScriDYc2/device/Mq91baGxCeHpVEDs5sRadide" target="_blank">
+    Open Dashboard
+  </a>
+</p>
+
+    <div id="statusBox" class="status">Loading...</div>
+
+    <hr>
+
+    <p><strong>Alert Display:</strong> <span id="alertState">Loading...</span></p>
+    <button onclick="toggleAlert()">Toggle Alert</button>
+  </div>
+
+  <script>
+    let currentAlert = 1;
+
+    // Load latest reading
+    async function loadLatest() {
+      const res = await fetch('latest_reading.php');
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById("time").innerText = data.data.recorded_at;
+        document.getElementById("temp").innerText = data.data.corrected_temp;
+        document.getElementById("humidity").innerText = data.data.humidity;
+
+        const statusBox = document.getElementById("statusBox");
+        const status = data.data.status;
+
+        statusBox.innerText = status;
+        statusBox.className = "status " + status.toLowerCase();
+      }
+    }
+
+    // Load alert state
+    async function loadControl() {
+      const res = await fetch('control.php');
+      const data = await res.json();
+
+      if (data.success) {
+        currentAlert = data.alert_enabled;
+        document.getElementById("alertState").innerText =
+          currentAlert === 1 ? "ON" : "OFF";
+      }
+    }
+
+    // Toggle alert
+    async function toggleAlert() {
+      const newState = currentAlert === 1 ? 0 : 1;
+
+      const formData = new FormData();
+      formData.append("alert_enabled", newState);
+
+      await fetch('control.php', {
+        method: 'POST',
+        body: formData
+      });
+
+      loadControl();
+    }
+
+    // Initial load
+    loadLatest();
+    loadControl();
+
+    // Auto refresh every 5 seconds
+    setInterval(() => {
+      loadLatest();
+      loadControl();
+    }, 5000);
+  </script>
+
+</body>
+</html>
