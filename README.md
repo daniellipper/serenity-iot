@@ -20,11 +20,12 @@ Serenity is a Raspberry Pi and Sense HAT based IoT project that monitors indoor 
 - AllThingsTalk Maker
 
 ## Main Files
-- `serenity_dual_send.py` - main project script
-- `serenity_matrix.py` - local matrix test/version
-- `serenity_send.py` - API sending version
-- `matrix_test.py` - LED matrix test
-- `serenity_light_test.py` - light sensor test
+## Main Files
+- `serenity_dual_send.py` - main application script handling sensor data collection, processing, LED matrix display, API communication, MQTT integration, and remote actuation
+- `add_reading.php` - API endpoint for storing sensor data in the MySQL database
+- `latest_reading.php` - API endpoint for retrieving the most recent sensor reading
+- `control.php` - API endpoint for handling remote alert toggle (actuation)
+- `index.html` - web dashboard for displaying live data and controlling the system
 
 ## Notes
 - Designed as a proof-of-concept IoT system
