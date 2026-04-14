@@ -22,7 +22,6 @@ Link to Dashboard: http://<ip_Address>/serenity-api/index.html
 - AllThingsTalk Maker
 
 ## Main Files
-## Main Files
 - `serenity_dual_send.py` - main application script handling sensor data collection, processing, LED matrix display, API communication, MQTT integration, and remote actuation
 - `add_reading.php` - API endpoint for storing sensor data in the MySQL database
 - `latest_reading.php` - API endpoint for retrieving the most recent sensor reading
