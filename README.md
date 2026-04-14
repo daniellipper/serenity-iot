@@ -1,6 +1,7 @@
 # Serenity - IoT Environmental Monitoring System
 
 Serenity is a Raspberry Pi and Sense HAT based IoT project that monitors indoor environmental comfort and provides local and remote feedback.
+
 Link to Dashboard: http://<ip_Address>/serenity-api/index.html
 
 ## Features
